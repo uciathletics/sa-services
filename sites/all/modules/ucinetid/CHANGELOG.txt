@@ -1,0 +1,56 @@
+2012-04-13
+First release for Drupal 7
+
+Items that require LDAP (Add UCI User, Batch Add UCI Users) are not
+enabled if the LDAP libraries are not available.
+
+Visitor account registration policy, and email validation policy can be
+configured separately for UCInetID users.
+
+When administrators create accounts with the "Batch Add UCI Users"
+feature, the accounts are always marked as activated (bypassing email
+validation requirements) and no email notification is sent.
+
+Previously, upon login into a Drupal account, if the user had recently
+authenticated with a UCInetID and the Drupal username matched the
+UCInetID, there was an attempt to automatically attach the UCInetID to
+the user account.   This created problems in some cases; the user must
+now attach the UCInetID manually on the "My Account" page.
+
+
+2011-08-17 
+Update repository for git (remove $Id$)
+
+2011-01-28
+Release 6.x-1.6
+Minor CSS fix for anteater favicon
+Add feature server URL for auto-update
+
+2010-08-16
+Release 6.x-1.5
+Fix call-time pass-by-reference complaint in ucinetid.module.
+Allow creating accounts not found in LDAP (e.g., FERPA blocked)
+if UCInetID and CampusID are known.
+
+2009-09-24
+Release 6.x-1.4
+Remove '!lastfirstname' username option: comma character is
+not allowed in username.  Do a lot more checking in batch add
+function for duplicated username, email address, ucinetid.
+
+2009-09-16
+Release 6.x-1.3
+
+2009-09-15
+Add 'UCInetID Registration' setting on admin page
+Show UCInetID form fields on user_register form (for admin)
+Added Batch User Add (using UCInetIDs)
+
+2009-08-18
+Added UCInetID Login link and block
+
+2009-03-04
+Added admin page at admin/user/ucinetid to allow changing settings
+
+2009-02-27
+First release

@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * @file
+ * The UCInetID module, which allows UCI WebAuth login
+ */
+
+/**
+ * Implementation of hook_install().
+ */
+function ucinetid_install() {
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function ucinetid_uninstall() {
+  variable_del('ucinetid_login');
+  variable_del('ucinetid_login_page');
+  variable_del('ucinetid_login_url');
+  variable_del('ucinetid_validate_url');
+
+  variable_del('ucinetid_ldap_server');
+  variable_del('ucinetid_ldap_uid');
+  variable_del('ucinetid_ldap_base_dn');
+
+  variable_del('ucinetid_user_email_verification');
+  variable_del('ucinetid_user_register');
+  variable_del('ucinetid_name');
+  variable_del('ucinetid_mail');
+}
