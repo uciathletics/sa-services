@@ -1,5 +1,4 @@
 <?php
-// $Id: system_test.module,v 1.33 2010/12/01 00:23:36 webchick Exp $
 
 /**
  * Implements hook_menu().
@@ -25,6 +24,13 @@ function system_test_menu() {
   $items['system-test/redirect/%'] = array(
     'title' => 'Redirect',
     'page callback' => 'system_test_redirect',
+    'page arguments' => array(2),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['system-test/multiple-redirects/%'] = array(
+    'title' => 'Redirect',
+    'page callback' => 'system_test_multiple_redirects',
     'page arguments' => array(2),
     'access arguments' => array('access content'),
     'type' => MENU_CALLBACK,
@@ -108,8 +114,23 @@ function system_test_sleep($seconds) {
 }
 
 function system_test_basic_auth_page() {
-  $output = t('$_SERVER[\'PHP_AUTH_USER\'] is @username.', array('@username' => $_SERVER['PHP_AUTH_USER']));
-  $output .= t('$_SERVER[\'PHP_AUTH_PW\'] is @password.', array('@password' => $_SERVER['PHP_AUTH_PW']));
+  // The Authorization HTTP header is forwarded via Drupal's .htaccess file even
+  // for PHP CGI SAPIs.
+  if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
+    $authorization_header = $_SERVER['HTTP_AUTHORIZATION'];
+  }
+  // If using CGI on Apache with mod_rewrite, the forwarded HTTP header appears
+  // in the redirected HTTP headers. See
+  // https://github.com/symfony/symfony/blob/master/src/Symfony/Component/HttpFoundation/ServerBag.php#L61
+  elseif (isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
+    $authorization_header = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
+  }
+  // Resemble PHP_AUTH_USER and PHP_AUTH_PW for a Basic authentication from
+  // the HTTP_AUTHORIZATION header. See
+  // http://www.php.net/manual/features.http-auth.php
+  list($user, $pw) = explode(':', base64_decode(substr($authorization_header, 6)));
+  $output = t('Username is @username.', array('@username' => $user));
+  $output .= t('Password is @password.', array('@password' => $pw));
   return $output;
 }
 
@@ -118,6 +139,30 @@ function system_test_redirect($code) {
   if ($code != 200) {
     // Header names are case-insensitive.
     header("locaTION: " . url('system-test/redirect/200', array('absolute' => TRUE)), TRUE, $code);
+    exit;
+  }
+  return '';
+}
+
+/**
+ * Menu callback; sends a redirect header to itself until $count argument is 0.
+ *
+ * Emulates the variable number of redirects (given by initial $count argument)
+ * to the final destination URL by continuous sending of 301 HTTP redirect
+ * headers to itself together with decrementing the $count parameter until the
+ * $count parameter reaches 0. After that it returns an empty string to render
+ * the final destination page.
+ *
+ * @param $count
+ *   The count of redirects left until the final destination page.
+ *
+ * @returns
+ *   The location redirect if the $count > 0, otherwise an empty string.
+ */
+function system_test_multiple_redirects($count) {
+  $count = (int) $count;
+  if ($count > 0) {
+    header("location: " . url('system-test/multiple-redirects/' . --$count, array('absolute' => TRUE)), TRUE, 301);
     exit;
   }
   return '';
@@ -147,8 +192,10 @@ function system_test_redirect_invalid_scheme() {
  * Implements hook_modules_installed().
  */
 function system_test_modules_installed($modules) {
-  if (in_array('aggregator', $modules)) {
-    drupal_set_message(t('hook_modules_installed fired for aggregator'));
+  if (variable_get('test_verbose_module_hooks')) {
+    foreach ($modules as $module) {
+      drupal_set_message(t('hook_modules_installed fired for @module', array('@module' => $module)));
+    }
   }
 }
 
@@ -156,8 +203,10 @@ function system_test_modules_installed($modules) {
  * Implements hook_modules_enabled().
  */
 function system_test_modules_enabled($modules) {
-  if (in_array('aggregator', $modules)) {
-    drupal_set_message(t('hook_modules_enabled fired for aggregator'));
+  if (variable_get('test_verbose_module_hooks')) {
+    foreach ($modules as $module) {
+      drupal_set_message(t('hook_modules_enabled fired for @module', array('@module' => $module)));
+    }
   }
 }
 
@@ -165,8 +214,10 @@ function system_test_modules_enabled($modules) {
  * Implements hook_modules_disabled().
  */
 function system_test_modules_disabled($modules) {
-  if (in_array('aggregator', $modules)) {
-    drupal_set_message(t('hook_modules_disabled fired for aggregator'));
+  if (variable_get('test_verbose_module_hooks')) {
+    foreach ($modules as $module) {
+      drupal_set_message(t('hook_modules_disabled fired for @module', array('@module' => $module)));
+    }
   }
 }
 
@@ -174,8 +225,10 @@ function system_test_modules_disabled($modules) {
  * Implements hook_modules_uninstalled().
  */
 function system_test_modules_uninstalled($modules) {
-  if (in_array('aggregator', $modules)) {
-    drupal_set_message(t('hook_modules_uninstalled fired for aggregator'));
+  if (variable_get('test_verbose_module_hooks')) {
+    foreach ($modules as $module) {
+      drupal_set_message(t('hook_modules_uninstalled fired for @module', array('@module' => $module)));
+    }
   }
 }
 
@@ -224,6 +277,14 @@ function system_test_system_info_alter(&$info, $file, $type) {
 
   // Make the system_dependencies_test visible by default.
   if ($file->name == 'system_dependencies_test') {
+    $info['hidden'] = FALSE;
+  }
+  if (in_array($file->name, array(
+    'system_incompatible_module_version_dependencies_test',
+    'system_incompatible_core_version_dependencies_test',
+    'system_incompatible_module_version_test',
+    'system_incompatible_core_version_test',
+  ))) {
     $info['hidden'] = FALSE;
   }
   if ($file->name == 'requirements1_test' || $file->name == 'requirements2_test') {
