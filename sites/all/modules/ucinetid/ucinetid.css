@@ -1,0 +1,48 @@
+/* ucinetid.css */
+
+/* style standard form, for consistency */
+#user-login-form ul {
+  margin-top: 0;
+}
+#user-login-form ul li {
+  list-style: none;
+}
+
+#user-login-form .ucinetid-links {
+  margin-top: 0.75em;
+  padding-bottom: 0;
+}
+#user-login .ucinetid-links {
+  padding-left: 0; /* LTR */
+}
+#user-login-form .ucinetid-links li,
+#user-login .ucinetid-links li {
+  display: none;
+  list-style: none;
+}
+html.js #user-login-form li.ucinetid-link,
+html.js #user-login li.ucinetid-link {
+  display: block;
+  margin-left: 0; /* LTR */
+}
+#user-login-form li.ucinetid-link a,
+#user-login li.ucinetid-link a {
+  background-image: url("login-bg.png");
+  background-position: left top; /* LTR */
+  background-repeat: no-repeat;
+  padding: 0 0 0 1.5em; /* LTR */
+  white-space: nowrap;
+}
+
+/* make things fit better */
+#block-user-login {
+  margin-bottom: 0;
+}
+.sidebar #ucinetid-login-wrapper {
+  padding-top: 0;
+  padding-right: 2px;
+}
+.sidebar #edit-ucinetid,
+.sidebar #edit-password {
+  width: 12em;
+}

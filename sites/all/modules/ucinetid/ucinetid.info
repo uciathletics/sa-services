@@ -1,0 +1,10 @@
+; ucinetid.info
+name = UCInetID
+description = UCInetID login using WebAuth
+core = 7.x
+
+;version = "6.x-1.x-dev"
+project = "ucinetid"
+;datestamp = "1296173274"
+;project status url = http://pastry.eng.uci.edu/fserver
+configure = admin/config/people/ucinetid

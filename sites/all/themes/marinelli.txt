@@ -1,0 +1,97 @@
+marinelli/css/slideshow.css
+
+Line 11
+#header-images{
+	height:240px; // from height: 320px
+}
+
+Line 24
+img.slide{
+	height:240px; // from height:320px;
+}
+
+Line 124
+a#header-image-prev:hover,
+a#header-image-next:hover{
+	background: #ffd900; /* change from f97305 */
+}
+
+marinelli/css/layout.css
+Line 67
+#top{
+	height: 0; // from height:140px;
+}
+
+Line 81
+#logo-container{
+	position:absolute; // added
+	top:100px; // added
+	z-index:3; // added
+}
+
+Line 190
+.outsidecontent{
+	height:0px; // added
+}
+
+marinelli/css/primary-links.css
+Line 42
+#navigation-primary > ul > li > a.active,
+#navigation-primary > ul > li > h2 > a.active,
+#navigation-primary > ul > li > a:hover,
+#navigation-primary > ul > li > h2 > a:hover,
+#navigation-primary > ul > li:hover > a,
+#navigation-primary > ul > li:hover > h2 > a{  /* active and hover state of the first level */
+	padding:0; //from padding:5px 10px 5px 10px;
+	margin-top:0; //from margin-top:-10px;
+}
+
+Line 191-194
+#navigation-primary > ul > li > a:hover,
+#navigation-primary > ul > li > h2 > a:hover,	
+#navigation-primary > ul > li:hover > a,
+#navigation-primary > ul > li:hover > h2 > a{ /* hover state of the first level */
+	background: #FFC82E; //from #f97e05;
+}
+
+Line 224
+.mega{
+	border-top: 10px solid #FFC82E; //from #f97e05;
+}
+
+Line 232
+.mega.closing{ /* mega menu while closing... */
+	border-bottom-color:#FFC82E; //from #f97e05;
+	border-left-color:#FFC82E; //from #f97e05;
+	border-right-color:#FFC82E; //from #f97e05;
+}
+
+Line 245
+.closepanel span:hover{
+	background:#FFC82E; //from #f97e05;
+}
+
+
+marinelli/css/css3/css3_graphics.css
+Line 49-52
+.cssgradients #navigation-primary > ul > li > a:hover,
+.cssgradients #navigation-primary > ul > li > h2 > a:hover,	
+.cssgradients #navigation-primary > ul > li:hover > a,
+.cssgradients #navigation-primary > ul > li:hover > h2 > a{
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0.0, #f4d7ba),color-stop(0.4, #FFC82E)); //from #f97e05;
+	background: -moz-linear-gradient(top center,#f4d7ba,#FFC82E 40%); //from #f97e05;
+}
+
+Line 98
+.cssgradients ul.primary li a:hover{
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0.0, #f4d7ba),color-stop(0.4, #FFC82E)); //from #f97e05;
+	background: -moz-linear-gradient(top center,#f4d7ba,#FFC82E 40%); //from #f97e05;
+}
+
+
+Line 118
+.cssgradients .form-submit:focus,
+.cssgradients #block-user-login .form-submit:focus{
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0.0, #f4d7ba),color-stop(0.4, #FFC82E)); //from #f97e05;
+	background: -moz-linear-gradient(top center,#f4d7ba,#FFC82E 40%); //from #f97e05;
+}
